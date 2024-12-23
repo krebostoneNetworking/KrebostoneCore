@@ -56,14 +56,16 @@ class MCServer:
     
     def start(self):
         # Create new process for minecraft server
-        if (self.__serverProcess == None or self.__serverProcess.poll() != None):
+        if (self.__serverProcess != None and self.__serverProcess.poll() != None):
             self.logger.logWarning("Cannot create new instance: Server is still running!")
             return
         
         self.isDoneBooting = False
+
+        bootCmd = f"cd {self.folder} && {self.starterScript}"
         
         commandArr = self.starterScript.split(" ")
-        self.__serverProcess = subprocess.Popen(commandArr, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        self.__serverProcess = subprocess.Popen(commandArr, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
         # Create monitoring thread
         self.__logThread = threading.Thread(target=self.__server_logThread)
@@ -73,18 +75,14 @@ class MCServer:
 
 
     def send(self, cmd:str):
-        # Only let the user to send command after it is fully booted
-        if self.isDoneBooting != True:
-            self.logger.logWarning("Unable to send command right now: Server does not fully booted yet!")
-            return
-        
         # Filtering typing stop
         if cmd == "stop":
             self.isDoneBooting = False
             self.logger.logWarning("Directly calling stop from command is not recommended. Use command 'mc stop' instead!")
 
         # Otherwise send the message to the process
-        self.__serverProcess.communicate(cmd)
+        self.__serverProcess.stdin.write(cmd)
+        self.__serverProcess.stdin.flush()
     
     def stop(self):
         if (self.__serverProcess != None or self.__serverProcess.poll() == None):
@@ -93,6 +91,7 @@ class MCServer:
         
         self.isDoneBooting = False
 
-        self.__serverProcess.communicate("stop")
+        self.__serverProcess.stdin.write("stop")
+        self.__serverProcess.stdin.flush()
 
 

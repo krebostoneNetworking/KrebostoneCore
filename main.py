@@ -37,7 +37,7 @@ if __name__ == "__main__":
     logStart()
     loadNecessary()
     try:
-        runCLI(mcServer, frpServer)
+        runCLI(mcServer, frpServer, logger)
     except KeyboardInterrupt:
         print("\n")
         logger.logInfo("Keyboard interruption detected. Shutting down necessary services...")

@@ -1,8 +1,8 @@
 {
     "debug_mode": false,
     "minecraft_server": {
-        "location": "test",
-        "starter_script": "test"
+        "location": "M:\\MiniMCServerExtend\\testServer",
+        "starter_script": "M:\\MiniMCServerExtend\\testServer\\start.bat"
     },
     "frp_server": {
         "location": "/path/to/frp",
