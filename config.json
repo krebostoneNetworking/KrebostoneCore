@@ -1,8 +1,8 @@
 {
     "debug_mode": false,
     "minecraft_server": {
-        "location": "",
-        "starter_script": ""
+        "location": "test",
+        "starter_script": "test"
     },
     "frp_server": {
         "location": "/path/to/frp",

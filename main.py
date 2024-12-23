@@ -6,17 +6,18 @@ bootArgs:list[str] = []
 logger:Logger = Logger("KSE")
 mcServer:MCServer = None
 
-def logStart(args:list[str]):
+def logStart():
     print("Krebostone KSE-Mini v0.1 created by kimsseTheWolf")
-    print(f"Booting Krebostone with arguments: {args}")
+    print(f"Booting Krebostone with arguments: {bootArgs}")
     logger.logInfo("Preparing for launch")
 
-def loadNecessary(args:list[str]):
+def loadNecessary():
     try:
         # Try to load minecraft server
         mcServer = MCServer()
         # Try to load frp server if necessary
-        if args.count("--no-frp") != 0:
+        if bootArgs.count("--no-frp") == 0:
+            logger.logInfo("Seeking frp service...")
             pass
         else:
             logger.logInfo("FRP Server initialization skipped because of argument: --no-frp")
