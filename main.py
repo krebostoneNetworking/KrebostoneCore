@@ -1,6 +1,7 @@
 from log import Logger
 from minecraftServer import MCServer
 from frpServer import FrpServer
+from CLI import runCLI
 import sys
 
 bootArgs:list[str] = []
@@ -35,4 +36,9 @@ if __name__ == "__main__":
     bootArgs = sys.argv
     logStart()
     loadNecessary()
+    try:
+        runCLI(mcServer, frpServer)
+    except KeyboardInterrupt:
+        print("\n")
+        logger.logInfo("Keyboard interruption detected. Shutting down necessary services...")
     
