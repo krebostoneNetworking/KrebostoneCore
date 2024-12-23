@@ -20,10 +20,10 @@ class Launchable(ABC):
         self.compName:str = compName
         self.exec:str = exec
         self.args:list[str] = args
-        self.__serverProcess:Popen = None
-        self.__stdOutHandle:Thread = None
-        self.__stdErrHandle:Thread = None
-        self.__logger:Logger = Logger(compName)
+        self.serverProcess:Popen = None
+        self.stdOutHandle:Thread = None
+        self.stdErrHandle:Thread = None
+        self.logger:Logger = Logger(compName)
         pass
 
     def __readStream(self, stream):
@@ -46,7 +46,7 @@ class Launchable(ABC):
         """Start the new service"""
         # First check if the service is still running
         if self.isRunning():
-            self.__logger.logError(f"Current service: {self.compName} is still running!")
+            self.logger.logError(f"Current service: {self.compName} is still running!")
             return False
         
         # Try to launch a new service
@@ -57,25 +57,25 @@ class Launchable(ABC):
             command = f"{self.exec} {args}"
 
             # Launch sub-process
-            self.__serverProcess = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True)
+            self.serverProcess = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True)
 
             # Launch std-out and std-err handling thread
-            self.__stdOutHandle = Thread(target=self.__readStream, args=(self.__serverProcess.stdout))
-            self.__stdErrHandle = Thread(target=self.__readStream, args=(self.__serverProcess.stdout))
+            self.stdOutHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout))
+            self.stdErrHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout))
 
             # Report current status
-            self.__logger.logInfo(f"Service: {self.compName} launched successfully!")
+            self.logger.logInfo(f"Service: {self.compName} launched successfully!")
             return True
             pass
         except:
-            self.__logger.logError(f"An error occured while trying to launch service: {self.compName}")
+            self.logger.logError(f"An error occured while trying to launch service: {self.compName}")
             return False
         pass
 
     def send(self, cmd:str):
         """Send command to service"""
-        self.__serverProcess.stdin.write(cmd + "\n")
-        self.__serverProcess.stdin.flush()
+        self.serverProcess.stdin.write(cmd + "\n")
+        self.serverProcess.stdin.flush()
         pass
 
     @abstractmethod
@@ -87,16 +87,16 @@ class Launchable(ABC):
         """Force terminate the service"""
         # Check if the service is still running
         if not self.isRunning():
-            self.__logger.logError(f"Service {self.compName} already stopped! No need for execution.")
+            self.logger.logError(f"Service {self.compName} already stopped! No need for execution.")
             return False
         else:
-            self.__serverProcess.terminate()
+            self.serverProcess.terminate()
             return True
         pass
 
     def isRunning(self):
         """Chcek if the service process is still running"""
-        if self.__serverProcess != None:
-            return self.__serverProcess.poll != None
+        if self.serverProcess != None:
+            return self.serverProcess.poll != None
         else:
             return False
