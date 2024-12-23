@@ -65,9 +65,11 @@ class Launchable(ABC):
 
             # Report current status
             self.__logger.logInfo(f"Service: {self.compName} launched successfully!")
+            return True
             pass
         except:
-            pass
+            self.__logger.logError(f"An error occured while trying to launch service: {self.compName}")
+            return False
         pass
 
     def send(self, cmd:str):
