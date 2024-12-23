@@ -24,10 +24,10 @@ class Logger:
         print(f"[{Fore.GREEN}INFO{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
     
     def logWarning(self, msg:str):
-        print(f"[{Fore.LIGHTRED_EX}INFO{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
+        print(f"[{Fore.LIGHTRED_EX}WARNING{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
 
     def logError(self, msg:str):
-        print(f"[{Fore.RED}INFO{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
+        print(f"[{Fore.RED}ERROR{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
 
     
     

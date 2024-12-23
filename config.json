@@ -1,8 +1,8 @@
 {
     "debug_mode": false,
     "minecraft_server": {
-        "location": "/path/to/server/folder",
-        "starter_script": "start.bat"
+        "location": "",
+        "starter_script": ""
     },
     "frp_server": {
         "location": "/path/to/frp",
