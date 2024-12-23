@@ -26,7 +26,7 @@ class Logger:
     def logWarning(self, msg:str):
         print(f"[{Fore.LIGHTRED_EX}INFO{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
 
-    def logInfo(self, msg:str):
+    def logError(self, msg:str):
         print(f"[{Fore.RED}INFO{Fore.WHITE}][{self.generateTimestamp()}][{self.packageName}] {msg}")
 
     
