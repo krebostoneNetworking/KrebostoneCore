@@ -5,6 +5,7 @@ from threading import Thread
 from log import Logger
 import traceback
 import os
+import time
 
 class Launchable(ABC):
 
@@ -48,8 +49,11 @@ class Launchable(ABC):
 
     def __processHealthMonitor(self):
         while True:
+            time.sleep(1)
             if not self.isRunning():
                 self.logger.logWarning(f"Detected service {self.compName} was exited!")
+                # Fallback to none after the sub-process is exited
+                self.serverProcess = None
                 break
             
 
@@ -123,6 +127,6 @@ class Launchable(ABC):
     def isRunning(self):
         """Chcek if the service process is still running"""
         if self.serverProcess != None:
-            return self.serverProcess.poll() != None
+            return self.serverProcess.poll() == None
         else:
             return False

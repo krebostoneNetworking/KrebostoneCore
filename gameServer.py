@@ -17,9 +17,9 @@ class GameServer(Launchable):
 
     def middleOperations(self, processedCmd:str):
         # Monitoring if the game is started
-        if (processedCmd.count("Done!") > 0):
+        if (processedCmd.count("For help, type \"help\"") > 0):
             self.isMinecraftFullyLaunched = True
-            self.logger("Minecraft server fully booted! Have fun with your friends!")
+            self.logger.logInfo("Minecraft server fully booted! Have fun with your friends! :D")
         pass
 
 
