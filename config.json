@@ -1,11 +1,17 @@
 {
     "debug_mode": false,
     "minecraft_server": {
-        "location": "test",
-        "starter_script": "test"
+        "instance_name": "Amazing_Minecraft_Server",
+        "working_dir": "",
+        "launch_command": "",
+        "arguments": []
     },
-    "frp_server": {
-        "location": "/path/to/frp",
-        "starter_script": "start.bat"
-    }
+    "frp_server": [
+        {
+            "instance_name": "minecraft_frp",
+            "working_dir": "",
+            "launch_command": "",
+            "arguments": []
+        }
+    ]
 }
