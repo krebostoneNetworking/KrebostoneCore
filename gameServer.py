@@ -3,8 +3,8 @@ from launchable import Launchable
 
 class GameServer(Launchable):
 
-    def __init__(self, compName, exec, args):
-        super().__init__(compName, exec, args)
+    def __init__(self, compName, wdir, exec, args):
+        super().__init__(compName, wdir, exec, args)
         self.isMinecraftFullyLaunched:bool = False
 
     def stop(self):
@@ -23,7 +23,7 @@ class GameServer(Launchable):
         pass
 
 
-mcServer:GameServer = GameServer("test_server", "java", ["-jar", "-Xmx4G", ".\\testServer\\mohist-1.20.1-513-server.jar"])
+mcServer:GameServer = GameServer("test_server", "C:\\Users\\ilove\\Documents\\TestServer", "java", ["-jar", "-Xmx4G", "C:\\Users\\ilove\\Documents\\TestServer\\server.jar"])
 mcServer.start()
 while True:
     cmd = input()

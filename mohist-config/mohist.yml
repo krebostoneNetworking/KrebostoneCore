@@ -4,4 +4,4 @@ mohist:
   libraries:
     check: true
     downloadsource: MOHIST
-  installation-finished: true
+  installation-finished: false

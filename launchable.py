@@ -3,12 +3,13 @@ from abc import ABC, abstractmethod
 from subprocess import Popen, PIPE
 from threading import Thread
 from log import Logger
+import traceback
 
 class Launchable(ABC):
 
     """An overall class for everything that can be launched and using i/o"""
 
-    def __init__(self, compName:str, exec:str, args:list[str]):
+    def __init__(self, compName:str, wdir:str|None, exec:str, args:list[str]):
         """
         Create a new launchable instance.
 
@@ -18,6 +19,7 @@ class Launchable(ABC):
         """
 
         self.compName:str = compName
+        self.wdir = wdir
         self.exec:str = exec
         self.args:list[str] = args
         self.serverProcess:Popen = None
@@ -69,10 +71,14 @@ class Launchable(ABC):
                 args += (self.args[i] + " ")
             command = f"{self.exec} {args}"
 
+            # Navigate to target working directory if there is one
+            if self.wdir is not None:
+                command = f"cd {self.wdir} && {command}"
+
             self.logger.logInfo(f"Try to load service with command: {command}")
 
             # Launch sub-process
-            self.serverProcess = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True)
+            self.serverProcess = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True, shell=True)
 
             # Launch std-out and std-err handling thread
             self.stdOutHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout, False))
@@ -86,8 +92,9 @@ class Launchable(ABC):
             self.logger.logInfo(f"Service: {self.compName} launched successfully!")
             return True
             pass
-        except:
-            self.logger.logError(f"An error occured while trying to launch service: {self.compName}")
+        except Exception as e:
+            self.logger.logError(f"An error occured while trying to launch service: {self.compName}. See the following traceback for details:")
+            traceback.print_exc()
             return False
         pass
 
