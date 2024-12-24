@@ -23,19 +23,32 @@ class Launchable(ABC):
         self.serverProcess:Popen = None
         self.stdOutHandle:Thread = None
         self.stdErrHandle:Thread = None
+        self.healthMonitorThread:Thread = None
         self.logger:Logger = Logger(compName)
         pass
 
-    def __readStream(self, stream):
+    def __readStream(self, stream, isErr:bool):
         """Reading outputs from sub-process and halding related events"""
         while True:
             line = stream.readline()
             if not line:
                 break
-            processedCommand = line.decode().strip()
+            processedCommand = line.strip()
+
+            if isErr:
+                self.logger.logError(processedCommand)
+            else:
+                self.logger.logInfo(processedCommand)
             # Call middle operations
             self.middleOperations(processedCommand)
         pass
+
+    def __processHealthMonitor(self):
+        while True:
+            if not self.isRunning():
+                self.logger.logWarning(f"Detected service {self.compName} was exited!")
+                break
+            
 
     @abstractmethod
     def middleOperations(processedCmd:str):
@@ -56,12 +69,18 @@ class Launchable(ABC):
                 args += (self.args[i] + " ")
             command = f"{self.exec} {args}"
 
+            self.logger.logInfo(f"Try to load service with command: {command}")
+
             # Launch sub-process
             self.serverProcess = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True)
 
             # Launch std-out and std-err handling thread
-            self.stdOutHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout))
-            self.stdErrHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout))
+            self.stdOutHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout, False))
+            self.stdErrHandle = Thread(target=self.__readStream, args=(self.serverProcess.stderr, True))
+            self.healthMonitorThread = Thread(target=self.__processHealthMonitor, args=())
+            self.stdOutHandle.start()
+            self.stdErrHandle.start()
+            self.healthMonitorThread.start()
 
             # Report current status
             self.logger.logInfo(f"Service: {self.compName} launched successfully!")
@@ -97,6 +116,6 @@ class Launchable(ABC):
     def isRunning(self):
         """Chcek if the service process is still running"""
         if self.serverProcess != None:
-            return self.serverProcess.poll != None
+            return self.serverProcess.poll() != None
         else:
             return False

@@ -21,3 +21,10 @@ class GameServer(Launchable):
             self.isMinecraftFullyLaunched = True
             self.logger("Minecraft server fully booted! Have fun with your friends!")
         pass
+
+
+mcServer:GameServer = GameServer("test_server", "java", ["-jar", "-Xmx4G", ".\\testServer\\mohist-1.20.1-513-server.jar"])
+mcServer.start()
+while True:
+    cmd = input()
+    mcServer.send(cmd)
