@@ -4,6 +4,7 @@ from subprocess import Popen, PIPE
 from threading import Thread
 from log import Logger
 import traceback
+import os
 
 class Launchable(ABC):
 
@@ -71,14 +72,13 @@ class Launchable(ABC):
                 args += (self.args[i] + " ")
             command = f"{self.exec} {args}"
 
-            # Navigate to target working directory if there is one
-            if self.wdir is not None:
-                command = f"cd {self.wdir} && {command}"
-
             self.logger.logInfo(f"Try to load service with command: {command}")
 
+            # Gather env
+            env = os.environ.copy()
+
             # Launch sub-process
-            self.serverProcess = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True, shell=True)
+            self.serverProcess = Popen(command, cwd=self.wdir, stdin=PIPE, stdout=PIPE, stderr=PIPE, text=True, shell=True, env=env)
 
             # Launch std-out and std-err handling thread
             self.stdOutHandle = Thread(target=self.__readStream, args=(self.serverProcess.stdout, False))
