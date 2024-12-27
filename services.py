@@ -44,3 +44,14 @@ class Services:
         for task in Services.servicesList['after']:
             Services.servicesList['after'][task].stop()
     
+    def startBefore():
+
+        for task in Services.servicesList['before']:
+            Services.servicesList['before'][task].start()
+        
+    def startAfter():
+
+        for task in Services.servicesList['after']:
+            Services.servicesList['after'][task].start()
+
+    
