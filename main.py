@@ -6,6 +6,8 @@ from config import Config
 from CLI import CLI
 from Exceptions.configExceptions import ConfigNeedsSetupException
 import time
+from errorHandler import ErrorHandler
+import traceback
 
 mLogger:Logger = Logger("Main")
 kConfig:Config = None
@@ -21,6 +23,7 @@ def cleanUp():
         minecraftGameServer.stop()
 
 def quitKrebostone():
+    mLogger.logInfo("Cleaning Krebostone...")
     cleanUp()
     mLogger.logInfo("Exiting Krebostone...")
     exit(0)
@@ -77,8 +80,19 @@ if __name__ == "__main__":
         mLogger.logInfo("All services are up and running! Type 'help' for list of available command")
 
         while CLI.cliThread.is_alive():
+            # Handle all possible exceptions from anywhere
+            if ErrorHandler.isEmpty():
+                pass
+            else:
+                raise ErrorHandler.getError()
+            
             time.sleep(0.1)
 
     except KeyboardInterrupt:
         mLogger.logWarning("Keyboard interrupt detected. Shutting down Krebostone safely...")
+        quitKrebostone()
+
+    except Exception as e:
+        mLogger.logWarning("An unexpected error occured. Here is what happened")
+        traceback.print_exc()
         quitKrebostone()
