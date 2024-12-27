@@ -1,18 +1,12 @@
 {
     "debug_mode": false,
     "minecraft_server": {
-        "instance_name": "",
-        "working_dir": "",
-        "launch_command": "",
-        "arguments": []
+        "instance_name": "FLTM_Server",
+        "working_dir": "C:\\Users\\ilove\\Documents\\TestServer",
+        "launch_command": "java",
+        "arguments": ["-jar", "-Xmx4G", ".\\server.jar"]
     },
     "services": [
-        {
-            "launch": "after",
-            "instance_name": "minecraft_frp",
-            "working_dir": "",
-            "launch_command": "",
-            "arguments": []
-        }
+        
     ]
 }

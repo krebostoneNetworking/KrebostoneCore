@@ -10,7 +10,7 @@ from errorHandler import ErrorHandler
 import traceback
 
 mLogger:Logger = Logger("Main")
-kConfig:Config = None
+kConfig:Config = Config()
 minecraftGameServer:GameServer = None
 
 def cleanUp():
@@ -32,7 +32,6 @@ if __name__ == "__main__":
 
     try:
         CLI.printLogo()
-        CLI.startCLIThread()
         # Start launch process
 
         # Config file loader
@@ -69,8 +68,12 @@ if __name__ == "__main__":
             kConfig.get("/minecraft_server/arguments"))
         
         mLogger.logInfo("Launching Minecraft processes. If the server is asking you to enter something, enter 'mc send <THINGS TO SEND>'")
+        CLI.startCLIThread(minecraftGameServer)
         time.sleep(2)
         minecraftGameServer.start()
+
+        while (not minecraftGameServer.isMinecraftFullyLaunched):
+            time.sleep(0.1)
 
         # Start after-boot processes
         mLogger.logInfo("Launching after-boot services")
@@ -79,7 +82,7 @@ if __name__ == "__main__":
         # Print done, and occupy the main thread
         mLogger.logInfo("All services are up and running! Type 'help' for list of available command")
 
-        while CLI.cliThread.is_alive():
+        while True:
             # Handle all possible exceptions from anywhere
             if ErrorHandler.isEmpty():
                 pass

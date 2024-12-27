@@ -1,6 +1,8 @@
 
 from log import Logger
 from threading import Thread
+from gameServer import GameServer
+from errorHandler import ErrorHandler
 
 class CLI:
 
@@ -22,9 +24,20 @@ Version 0.1 beta
 """)
         pass
 
-    def runCLI():
+    def runCLI(mcServer:GameServer):
         while True:
-            input()
+            cmd = input()
+            cmdList:list[str] = cmd.split(" ")
+            if (cmdList[0] == "mc"):
+                if (cmdList[1] == "send"):
+                    mcServer.send(cmd[8:])
+                pass
+            elif (cmdList[0] == "stop"):
+                ErrorHandler.enqueueError(KeyboardInterrupt)
+                break
+            else:
+                print("Unknown Command. Type 'help for list of available command'")
 
-    def startCLIThread():
-        CLI.cliThread = Thread(target=CLI.runCLI)
+    def startCLIThread(mcServer:GameServer):
+        CLI.cliThread = Thread(target=CLI.runCLI, args=(mcServer,))
+        CLI.cliThread.start()
