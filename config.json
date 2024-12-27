@@ -6,8 +6,9 @@
         "launch_command": "",
         "arguments": []
     },
-    "frp_server": [
+    "services": [
         {
+            "launch": "after",
             "instance_name": "minecraft_frp",
             "working_dir": "",
             "launch_command": "",

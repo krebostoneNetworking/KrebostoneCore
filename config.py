@@ -21,13 +21,8 @@ class Config:
                 "launch_command": "",
                 "arguments": []
             },
-            "frp_server": [
-                {
-                    "instance_name": "minecraft_frp",
-                    "working_dir": "",
-                    "launch_command": "",
-                    "arguments": []
-                }
+            "services": [
+                
             ]
         }
         
