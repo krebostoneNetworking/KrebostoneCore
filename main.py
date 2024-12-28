@@ -8,10 +8,12 @@ from Exceptions.configExceptions import ConfigNeedsSetupException
 import time
 from errorHandler import ErrorHandler
 import traceback
+import sys
 
 mLogger:Logger = Logger("Main")
 kConfig:Config = Config()
 minecraftGameServer:GameServer = None
+mainThread:bool = False # Control the start/stop of main thread
 
 def cleanUp():
     mLogger.logInfo("Shutting down side services...")
@@ -21,12 +23,16 @@ def cleanUp():
         mLogger.logWarning("Skipping shutdown process for game server: Server instance not created yet!")
     else:
         minecraftGameServer.stop()
+        while minecraftGameServer.isRunning():
+            time.sleep(0.1)
+        return
 
 def quitKrebostone():
+    mainThread = False
     mLogger.logInfo("Cleaning Krebostone...")
     cleanUp()
     mLogger.logInfo("Exiting Krebostone...")
-    exit(0)
+    sys.exit(0)
 
 if __name__ == "__main__":
 
@@ -40,7 +46,7 @@ if __name__ == "__main__":
             kConfig.load()
         except ConfigNeedsSetupException as e:
             mLogger.logError("Config file does not exists. A new copy has been created. Fill in all necessary information and restart!")
-            exit(0)
+            sys.exit(0)
         mLogger.logInfo("Config loaded successfully")
 
         # Load all services
@@ -81,14 +87,14 @@ if __name__ == "__main__":
 
         # Print done, and occupy the main thread
         mLogger.logInfo("All services are up and running! Type 'help' for list of available command")
+        mainThread = True
 
-        while True:
+        while mainThread:
             # Handle all possible exceptions from anywhere
             if ErrorHandler.isEmpty():
                 pass
             else:
-                raise ErrorHandler.getError()
-            
+                raise ErrorHandler.getError()            
             time.sleep(0.1)
 
     except KeyboardInterrupt:

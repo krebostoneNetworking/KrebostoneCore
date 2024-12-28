@@ -1,6 +1,7 @@
 
 from service import Service
 from Exceptions.servicesExceptions import InvalidServicePriorityException, ServiceAlreadyExistsException
+import time
 
 class Services:
 
@@ -43,6 +44,16 @@ class Services:
         
         for task in Services.servicesList['after']:
             Services.servicesList['after'][task].stop()
+
+        # Wait until all services are stopped, before and after
+        for task in Services.servicesList['before']:
+            while Services.servicesList['before'][task].isRunning():
+                time.sleep(0.1)
+        
+        for task in Services.servicesList['after']:
+            while Services.servicesList['after'][task].isRunning():
+                time.sleep(0.1)
+
     
     def startBefore():
 
