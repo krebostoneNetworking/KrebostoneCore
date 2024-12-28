@@ -1,4 +1,3 @@
-
 from log import Logger
 from gameServer import GameServer
 from services import Services
@@ -9,6 +8,7 @@ import time
 from errorHandler import ErrorHandler
 import traceback
 import sys
+import os
 
 mLogger:Logger = Logger("Main")
 kConfig:Config = Config()
@@ -28,11 +28,13 @@ def cleanUp():
         return
 
 def quitKrebostone():
+    global mainThread
     mainThread = False
     mLogger.logInfo("Cleaning Krebostone...")
     cleanUp()
     mLogger.logInfo("Exiting Krebostone...")
-    sys.exit(0)
+    mLogger.logInfo("Goodbye!")
+    os._exit(0)
 
 if __name__ == "__main__":
 
