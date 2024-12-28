@@ -12,3 +12,6 @@ class Service(Launchable):
             return False
         else:
             self.terminate()
+
+    def middleOperations(self, processedCmd):
+        pass
