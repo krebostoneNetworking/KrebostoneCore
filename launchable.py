@@ -36,17 +36,21 @@ class Launchable(ABC):
     def __readStream(self, stream:TextIOWrapper, isErr:bool):
         """Reading outputs from sub-process and halding related events"""
         while True:
-            line = stream.readline().encode(self.encoding, errors="ignore").decode(self.encoding, errors="ignore")
-            if not line:
-                break
-            processedCommand = line.strip()
+            try:
+                line = stream.readline().encode(self.encoding, errors="ignore").decode(self.encoding, errors="ignore")
+                if not line:
+                    break
+                processedCommand = line.strip()
 
-            if isErr:
-                self.logger.logError(processedCommand)
-            else:
-                self.logger.logInfo(processedCommand)
-            # Call middle operations
-            self.middleOperations(processedCommand)
+                if isErr:
+                    self.logger.logError(processedCommand)
+                else:
+                    self.logger.logInfo(processedCommand)
+                # Call middle operations
+                self.middleOperations(processedCommand)
+            except Exception as e:
+                self.logger.logError("Encoding error occured while reading stream!")
+                self.logger.logError(f"{stream.buffer.read()}")
         pass
 
     def __processHealthMonitor(self):
