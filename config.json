@@ -7,6 +7,12 @@
         "arguments": ["-jar", "-Xmx4G", ".\\server.jar"]
     },
     "services": [
-        
+        {
+            "launch": "after",
+            "instance_name": "Server-FRP",
+            "working_dir": "C:\\Users\\ilove\\Documents\\frp",
+            "launch_command": "frpc.exe",
+            "arguments": ["-u", "f2b62f7f02809cbc6596f86d5dffdda8", "-p", "92496"]
+        }
     ]
 }
