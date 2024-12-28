@@ -3,11 +3,14 @@ from log import Logger
 from threading import Thread
 from gameServer import GameServer
 from errorHandler import ErrorHandler
+from typing import Callable
 
 class CLI:
 
     logger:Logger = Logger("CLI")
     cliThread:Thread = None
+    injectedHandlers:list[Callable[..., bool]] = [] # For future uses, other modules can inject their command to CLI
+                                                    # The boolean represents whether the command is handled or not
 
     def printLogo():
         print("""
@@ -36,7 +39,14 @@ Version 0.1 beta
                 ErrorHandler.enqueueError(KeyboardInterrupt)
                 break
             else:
-                print("Unknown Command. Type 'help for list of available command'")
+                # Check all injected command first
+                handled:bool = False
+                for handler in CLI.injectedHandlers:
+                    handled = handler(cmdList)
+                    if handled:
+                        break
+                if not handled:
+                    CLI.logger.logWarning(f"Command: {cmd} is not recognized!")
 
     def startCLIThread(mcServer:GameServer):
         CLI.cliThread = Thread(target=CLI.runCLI, args=(mcServer,))
