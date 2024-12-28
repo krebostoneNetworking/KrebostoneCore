@@ -51,3 +51,7 @@ Version 0.1 beta
     def startCLIThread(mcServer:GameServer):
         CLI.cliThread = Thread(target=CLI.runCLI, args=(mcServer,))
         CLI.cliThread.start()
+
+    def injectHandler(handler:Callable[..., bool]):
+        CLI.injectedHandlers.append(handler)
+        pass
