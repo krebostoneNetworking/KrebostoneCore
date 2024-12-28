@@ -6,12 +6,13 @@ from log import Logger
 import traceback
 import os
 import time
+from io import TextIOWrapper
 
 class Launchable(ABC):
 
     """An overall class for everything that can be launched and using i/o"""
 
-    def __init__(self, compName:str, wdir:str|None, exec:str, args:list[str]):
+    def __init__(self, compName:str, wdir:str|None, exec:str, args:list[str], encoding:str="utf-8"):
         """
         Create a new launchable instance.
 
@@ -28,13 +29,14 @@ class Launchable(ABC):
         self.stdOutHandle:Thread = None
         self.stdErrHandle:Thread = None
         self.healthMonitorThread:Thread = None
+        self.encoding:str = encoding
         self.logger:Logger = Logger(compName)
         pass
 
-    def __readStream(self, stream, isErr:bool):
+    def __readStream(self, stream:TextIOWrapper, isErr:bool):
         """Reading outputs from sub-process and halding related events"""
         while True:
-            line = stream.readline()
+            line = stream.readline().encode(self.encoding, errors="ignore").decode(self.encoding, errors="ignore")
             if not line:
                 break
             processedCommand = line.strip()
