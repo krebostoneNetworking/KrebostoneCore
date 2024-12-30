@@ -1,5 +1,5 @@
 from log import Logger
-from gameServer import GameServer
+from KBCore.MinecraftServer.gameServer import GameServer
 from KBCore.Launchables.services import Services
 from KBCore.Config.config import Config
 from CLI import CLI
