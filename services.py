@@ -10,7 +10,7 @@ class Services:
         "after": {}
     }
 
-    def addTaskFromMetadata(launch:str, name:str, wkdir:str, launchCmd:str, args:list[str]):
+    def addTaskFromMetadata(launch:str, name:str, wkdir:str, launchCmd:str, args:list[str], stopMethod="stop"):
         
         # Check valid priority
         if launch != "before" and launch != "after":
@@ -21,7 +21,7 @@ class Services:
             raise ServiceAlreadyExistsException
         
         # Append task to list
-        targetList:Service = Service(name, wkdir, launchCmd, args)
+        targetList:Service = Service(name, wkdir, launchCmd, args, stopMethod)
         Services.servicesList[launch][name] = targetList
 
     def addTaskFromObject(launch:str, tService:Service):
