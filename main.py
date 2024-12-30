@@ -1,6 +1,6 @@
 from log import Logger
 from gameServer import GameServer
-from services import Services
+from KBCore.Launchables.services import Services
 from KBCore.Config.config import Config
 from CLI import CLI
 from KBCore.Exceptions.configExceptions import ConfigNeedsSetupException

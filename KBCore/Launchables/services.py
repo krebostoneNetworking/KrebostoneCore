@@ -1,5 +1,5 @@
 
-from service import Service
+from KBCore.Launchables.service import Service
 from KBCore.Exceptions.servicesExceptions import InvalidServicePriorityException, ServiceAlreadyExistsException
 import time
 
