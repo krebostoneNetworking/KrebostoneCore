@@ -40,10 +40,24 @@ class Services:
     def stopAll():
 
         for task in Services.servicesList['before']:
-            Services.servicesList['before'][task].stop()
+            if Services.servicesList['before'][task]['stop'] == "stop":
+                Services.servicesList['before'][task].stop()
+            elif Services.servicesList['before'][task]['stop'] == "kill":
+                Services.servicesList['before'][task].kill()
+            elif Services.servicesList['before'][task]['stop'] == "terminate":
+                Services.servicesList['before'][task].terminate()
+            else:
+                Services.servicesList['before'][task].stop()
         
         for task in Services.servicesList['after']:
-            Services.servicesList['after'][task].stop()
+            if Services.servicesList['after'][task]['stop'] == "stop":
+                Services.servicesList['after'][task].stop()
+            elif Services.servicesList['after'][task]['stop'] == "kill":
+                Services.servicesList['after'][task].kill()
+            elif Services.servicesList['after'][task]['stop'] == "terminate":
+                Services.servicesList['after'][task].terminate()
+            else:
+                Services.servicesList['after'][task].stop()
 
         # Wait until all services are stopped, before and after
         for task in Services.servicesList['before']:
