@@ -10,7 +10,7 @@ class Services:
         "after": {}
     }
 
-    def addTaskFromMetadata(launch:str, name:str, wkdir:str, launchCmd:str, args:list[str]):
+    def addTaskFromMetadata(launch:str, name:str, wkdir:str, launchCmd:str, args:list[str], stopMethod="stop"):
         
         # Check valid priority
         if launch != "before" and launch != "after":
@@ -21,7 +21,7 @@ class Services:
             raise ServiceAlreadyExistsException
         
         # Append task to list
-        targetList:Service = Service(name, wkdir, launchCmd, args)
+        targetList:Service = Service(name, wkdir, launchCmd, args, stopMethod)
         Services.servicesList[launch][name] = targetList
 
     def addTaskFromObject(launch:str, tService:Service):
@@ -40,10 +40,24 @@ class Services:
     def stopAll():
 
         for task in Services.servicesList['before']:
-            Services.servicesList['before'][task].stop()
+            if Services.servicesList['before'][task]['stop'] == "stop":
+                Services.servicesList['before'][task].stop()
+            elif Services.servicesList['before'][task]['stop'] == "kill":
+                Services.servicesList['before'][task].kill()
+            elif Services.servicesList['before'][task]['stop'] == "terminate":
+                Services.servicesList['before'][task].terminate()
+            else:
+                Services.servicesList['before'][task].stop()
         
         for task in Services.servicesList['after']:
-            Services.servicesList['after'][task].stop()
+            if Services.servicesList['after'][task]['stop'] == "stop":
+                Services.servicesList['after'][task].stop()
+            elif Services.servicesList['after'][task]['stop'] == "kill":
+                Services.servicesList['after'][task].kill()
+            elif Services.servicesList['after'][task]['stop'] == "terminate":
+                Services.servicesList['after'][task].terminate()
+            else:
+                Services.servicesList['after'][task].stop()
 
         # Wait until all services are stopped, before and after
         for task in Services.servicesList['before']:

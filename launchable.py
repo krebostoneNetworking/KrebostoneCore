@@ -130,6 +130,17 @@ class Launchable(ABC):
             return True
         pass
 
+    def kill(self):
+        """Kill the service"""
+        # Check if the service is still running
+        if not self.isRunning():
+            self.logger.logError(f"Service {self.compName} already stopped! No need for execution.")
+            return False
+        else:
+            self.serverProcess.kill()
+            return True
+        pass
+
     def isRunning(self):
         """Chcek if the service process is still running"""
         if self.serverProcess != None:
