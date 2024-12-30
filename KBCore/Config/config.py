@@ -4,7 +4,7 @@ import os
 import dpath
 import dpath.util
 from log import Logger
-from Exceptions.configExceptions import ConfigNeedsSetupException as CfgSetupException
+from KBCore.Exceptions.configExceptions import ConfigNeedsSetupException as CfgSetupException
 
 class Config:
 
