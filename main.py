@@ -61,7 +61,8 @@ if __name__ == "__main__":
                 i['instance_name'],
                 i['working_dir'],
                 i['launch_command'],
-                i['arguments']
+                i['arguments'],
+                i['stop']
             )
 
         # Start before-boot processes
