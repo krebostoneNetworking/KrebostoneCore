@@ -5,7 +5,7 @@ from KBCore.Config.config import Config
 from CLI import CLI
 from KBCore.Exceptions.configExceptions import ConfigNeedsSetupException
 import time
-from errorHandler import ErrorHandler
+from KBCore.Exceptions.errorHandler import ErrorHandler
 import traceback
 import sys
 import os

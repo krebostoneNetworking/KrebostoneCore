@@ -2,7 +2,7 @@
 from log import Logger
 from threading import Thread
 from KBCore.MinecraftServer.gameServer import GameServer
-from errorHandler import ErrorHandler
+from KBCore.Exceptions.errorHandler import ErrorHandler
 from typing import Callable
 
 class CLI:
