@@ -1,4 +1,4 @@
-from log import Logger
+from KBCore.Logging.log import Logger
 from KBCore.MinecraftServer.gameServer import GameServer
 from KBCore.Launchables.services import Services
 from KBCore.Config.config import Config

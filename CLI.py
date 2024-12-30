@@ -1,5 +1,5 @@
 
-from log import Logger
+from KBCore.Logging.log import Logger
 from threading import Thread
 from KBCore.MinecraftServer.gameServer import GameServer
 from KBCore.Exceptions.errorHandler import ErrorHandler

@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from subprocess import Popen, PIPE
 from threading import Thread
-from log import Logger
+from KBCore.Logging.log import Logger
 import traceback
 import os
 import time
