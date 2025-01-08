@@ -54,12 +54,3 @@ class MCServerProperties:
             return dpath.get(self.serverProperties, key)
         except Exception as e:
             return None
-        
-if __name__ == "__main__":
-    testProperties = MCServerProperties("C:\\Users\\ilove\\Documents\\FLTM_Server")
-    print(testProperties.load())
-    print(testProperties.get("allow-flight"))
-    print(testProperties.get("krebostone"))
-
-    anotherTest = MCServerProperties("C:\\Users\\ilove\\Documents\\FLTM_Serverr")
-    print(anotherTest.load())
