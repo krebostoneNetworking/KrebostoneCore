@@ -1,24 +1,39 @@
 
 from KBCore.Config.config import Config
 from KBCore.MinecraftServer.gameServer import GameServer
+import os
+import json
 
 class Whitelist:
 
-    def __init__(self, kConfig:Config, gameServer:GameServer):
-        self.kConfig = kConfig
-        self.gameServer = gameServer
+    def __init__(self, wkdir:str):
+        self.whitelistFilePath = os.path.join(wkdir, "whitelist.json")
         self.minecraftWhitelist:list = None
 
     def loadWhitelist(self):
         """
         Load whitelist content from server workdir
         """
+        try:
+            with open(self.whitelistFilePath, "r") as whitelistJson:
+                self.minecraftWhitelist = json.load(whitelistJson)
+                return True
+        except Exception as e:
+            return False
         pass
 
-    def isInWhitelist(username:str)->bool:
+    def isWhitelistLoaded(self)->bool:
+        return self.minecraftWhitelist == None
+
+    def getUserUUID(self, username:str) -> str | None:
         """
-        Check whether the player is exists in the server whitelist
+        Return the user's UUID if the user exists, otherwise return None
         """
+        for i in self.minecraftWhitelist:
+            if i['name'] == username:
+                return i['uuid']
+            
+        return None
         pass
 
     def addUser(username:str):
