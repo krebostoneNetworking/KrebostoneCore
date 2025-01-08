@@ -1,5 +1,5 @@
 
-from launchable import Launchable
+from KBCore.Launchables.launchable import Launchable
 
 class GameServer(Launchable):
 
