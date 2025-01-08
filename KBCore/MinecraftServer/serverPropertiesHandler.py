@@ -44,6 +44,14 @@ class MCServerProperties:
             self.serverProperties = None
             return False
         
+    def isLoaded(self):
+        """
+        Does Krebostone loaded server.properties correctly?
+
+        Return a boolean represents its state.
+        """
+        return self.serverProperties == None
+        
     def get(self, key:str):
         """
         Get a value from server.properties according to its key
