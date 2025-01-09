@@ -5,3 +5,6 @@ class InvalidServicePriorityException(Exception):
 
 class ServiceAlreadyExistsException(Exception):
     """Will raise if there is already a task with the same name in the list"""
+
+class ServiceNotLaunchedException(Exception):
+    """Will raise if target service is not started"""
