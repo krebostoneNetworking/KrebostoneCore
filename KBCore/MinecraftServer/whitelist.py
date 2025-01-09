@@ -1,13 +1,15 @@
 
 from KBCore.Config.config import Config
 from KBCore.MinecraftServer.gameServer import GameServer
+from KBCore.Exceptions.servicesExceptions import ServiceNotLaunchedException
 import os
 import json
 
 class Whitelist:
 
-    def __init__(self, wkdir:str):
+    def __init__(self, wkdir:str, gameServer:GameServer):
         self.whitelistFilePath = os.path.join(wkdir, "whitelist.json")
+        self.gameServer = gameServer
         self.minecraftWhitelist:list = None
 
     def loadWhitelist(self):
@@ -36,26 +38,28 @@ class Whitelist:
         return None
         pass
 
-    def addUser(username:str):
+    def addUser(self,username:str):
         """
         Add target user into server whitelist.
 
-        When server is on, Krebostone will automatically add user via command and refresh
-
-        If server is offline or stopped, and with online-mode is set to off, Krebostone will directly add a new UUID
-        for the user. Otherwise, it will stop this process.
-
+        This operation can only be done when the server is fully launched
         """
+        if not self.gameServer.isMinecraftFullyLaunched:
+            raise ServiceNotLaunchedException()
+        
+        # Add whitelist using command
+        self.gameServer.send(f"whitelist add {username}")
         pass
 
-    def removeUser(username:str):
+    def removeUser(self, username:str):
         """
         Remove target user from server whitelist.
 
-        When server is on, Krebostone will automatically remove user via command and refresh
-
-        If server is offline or stopped, and with online-mode is set to off, Krebostone will directly remove the target
-        user. Otherwise, it will stop this process.
-
+        This operation can only be done when the server is fully launched
         """
+        if not self.gameServer.isMinecraftFullyLaunched:
+            raise ServiceNotLaunchedException()
+        
+        # Add whitelist using command
+        self.gameServer.send(f"whitelist remove {username}")
         pass
